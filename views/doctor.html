@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor - Booking System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="nav-title">👨‍⚕️ Doctor Dashboard</h1>
+                <div class="nav-buttons">
+                    <button class="btn btn-notification" onclick="toggleNotifications()">
+                        🔔 Notifications
+                        <span id="notificationBadge" class="badge hidden">0</span>
+                    </button>
+                    <button class="btn btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-content doctor-view">
+            <!-- Left Panel - Calendar & Unavailable Dates -->
+            <div class="left-panel">
+                <div class="panel-section">
+                    <h2>Calendar View</h2>
+                    <div id="calendar" class="calendar"></div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>Mark Date Unavailable</h2>
+                    <form id="unavailableForm" class="form">
+                        <div class="form-group">
+                            <label for="unavailableDate">Date:</label>
+                            <input type="date" id="unavailableDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="unavailableReason">Reason:</label>
+                            <textarea id="unavailableReason" placeholder="e.g., On Leave, Personal Appointment" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Mark as Unavailable</button>
+                    </form>
+                </div>
+
+                <div class="panel-section">
+                    <h2>Unavailable Dates</h2>
+                    <div id="unavailableDatesList" class="list-group">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Panel - Notifications -->
+            <div id="notificationsPanel" class="notification-panel hidden">
+                <div class="panel-section">
+                    <h2>Notifications</h2>
+                    <div id="notificationsContent" class="notifications-list">
+                        <p class="loading">Loading notifications...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Appointments Tabs -->
+            <div class="right-panel">
+                <div class="panel-section">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('pendingAppointments')">Pending Appointments</button>
+                        <button class="tab-btn" onclick="switchTab('rescheduleRequests')">Reschedule Requests</button>
+                        <button class="tab-btn" onclick="switchTab('completedAppointments')">Completed Appointments</button>
+                    </div>
+
+                    <!-- Pending Appointments Tab -->
+                    <div id="pendingAppointments" class="tab-content active">
+                        <h3>Pending Appointments</h3>
+                        <div id="pendingList" class="appointments-list">
+                            <p class="loading">Loading appointments...</p>
+                        </div>
+                    </div>
+
+                    <!-- Reschedule Requests Tab -->
+                    <div id="rescheduleRequests" class="tab-content">
+                        <h3>Reschedule Requests</h3>
+                        <div id="rescheduleList" class="appointments-list">
+                            <p class="loading">Loading reschedule requests...</p>
+                        </div>
+                    </div>
+
+                    <!-- Completed Appointments Tab -->
+                    <div id="completedAppointments" class="tab-content">
+                        <h3>Completed Appointments</h3>
+                        <div id="completedList" class="appointments-list">
+                            <p class="loading">Loading appointments...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeNotification()">&times;</span>
+            <div id="notificationMessage"></div>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="popupModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="popupContent"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/js/doctor.js"></script>
+</body>
+</html>

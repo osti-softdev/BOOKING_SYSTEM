@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient - Booking System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="nav-title">🏥 Patient Dashboard</h1>
+                <div class="nav-buttons">
+                    <button class="btn btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <!-- Left Panel - Doctor Selection -->
+            <div class="left-panel">
+                <div class="panel-section">
+                    <h2>Step 1: Select a Doctor</h2>
+                    <div id="doctorList" class="doctor-list">
+                        <p class="loading">Loading doctors...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Panel - Calendar -->
+            <div class="middle-panel">
+                <div class="panel-section">
+                    <h2>Step 2: Pick a Date</h2>
+                    <div id="calendar" class="calendar"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Booking Form & Appointments -->
+            <div class="right-panel">
+                <div class="panel-section">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('booking')">Book Appointment</button>
+                        <button class="tab-btn" onclick="switchTab('myAppointments')">My Appointments</button>
+                    </div>
+
+                    <!-- Booking Tab -->
+                    <div id="booking" class="tab-content active">
+                        <h3>Step 3: Complete Booking</h3>
+                        <form id="bookingForm" class="booking-form">
+                            <div class="form-group">
+                                <label>Doctor:</label>
+                                <input type="text" id="selectedDoctorDisplay" readonly placeholder="No doctor selected">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <input type="text" id="selectedDateDisplay" readonly placeholder="No date selected">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appointmentTime">Preferred Time:</label>
+                                <input type="time" id="appointmentTime" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reason">Reason for Visit:</label>
+                                <textarea id="reason" placeholder="Please describe your reason for the appointment" rows="4" required></textarea>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" onclick="showAppointmentSummary()">Review & Confirm</button>
+                        </form>
+                    </div>
+
+                    <!-- My Appointments Tab -->
+                    <div id="myAppointments" class="tab-content">
+                        <h3>My Appointments</h3>
+                        <div id="appointmentsList" class="appointments-list">
+                            <p class="loading">Loading appointments...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Summary Modal -->
+    <div id="summaryModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeSummary()">&times;</span>
+            <h2>Appointment Summary</h2>
+            <div class="summary-details">
+                <div class="summary-item">
+                    <span class="summary-label">👨‍⚕️ Doctor:</span>
+                    <span class="summary-value" id="summaryDoctor">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">🏥 Specialty:</span>
+                    <span class="summary-value" id="summarySpecialty">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">📅 Date:</span>
+                    <span class="summary-value" id="summaryDate">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">⏰ Time:</span>
+                    <span class="summary-value" id="summaryTime">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">📝 Reason:</span>
+                    <span class="summary-value" id="summaryReason">-</span>
+                </div>
+            </div>
+            <div class="summary-actions">
+                <button class="btn btn-primary btn-large" onclick="confirmBooking()">✅ Confirm Booking</button>
+                <button class="btn btn-secondary btn-large" onclick="closeSummary()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeNotification()">&times;</span>
+            <div id="notificationMessage"></div>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="popupModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="popupContent"></div>
+        </div>
+    </div>
+
+    <!-- Reschedule Modal -->
+    <div id="rescheduleModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRescheduleModal()">&times;</span>
+            <h2>Reschedule Appointment</h2>
+            <form onsubmit="submitReschedule(event)">
+                <div class="form-group">
+                    <label for="rescheduleDate">New Date:</label>
+                    <input type="date" id="rescheduleDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="rescheduleTime">New Time:</label>
+                    <input type="time" id="rescheduleTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="rescheduleReason">Reason for Reschedule:</label>
+                    <textarea id="rescheduleReason" placeholder="Explain why you need to reschedule" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Reschedule Request</button>
+                <button type="button" class="btn btn-secondary" onclick="closeRescheduleModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cancellation Policy Modal -->
+    <div id="cancellationPolicyModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCancellationPolicy()">&times;</span>
+            <h2>Cancellation Policy</h2>
+            <div class="policy-content">
+                <h3>Our Appointment Cancellation Policy</h3>
+                <div class="policy-section">
+                    <h4>📋 Cancellation Requirements:</h4>
+                    <ul>
+                        <li><strong>24 Hours Notice:</strong> You must cancel or reschedule at least 24 hours before your scheduled appointment time.</li>
+                        <li><strong>Online Cancellation:</strong> Use this system to cancel appointments directly from your dashboard.</li>
+                        <li><strong>Confirmation:</strong> You will receive a confirmation message once your cancellation is processed.</li>
+                    </ul>
+                </div>
+                <div class="policy-section">
+                    <h4>⏰ Late Cancellation Penalties:</h4>
+                    <ul>
+                        <li><strong>Less than 24 hours:</strong> Full appointment fee may be charged.</li>
+                        <li><strong>No-show:</strong> Full appointment fee will be charged, and you may be blocked from booking for 30 days.</li>
+                    </ul>
+                </div>
+                <div class="policy-section">
+                    <h4>✅ Reschedule Policy:</h4>
+                    <ul>
+                        <li>Rescheduling does not count as a cancellation if done 24 hours before appointment.</li>
+                        <li>You can reschedule your appointment up to 3 times.</li>
+                        <li>Doctor must approve your reschedule request.</li>
+                    </ul>
+                </div>
+                <div class="policy-section">
+                    <h4>💰 Refund Policy:</h4>
+                    <ul>
+                        <li>Cancellations 24+ hours in advance: Full refund</li>
+                        <li>Cancellations less than 24 hours: No refund</li>
+                        <li>No-show: No refund</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="closeCancellationPolicy()">Understood</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/js/client.js"></script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking System - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .role-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .role-btn.active {
+            background-color: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-login {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-register {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-register:hover {
+            background-color: #e0e0e0;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .toggle-form a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+
+
+
+        .message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+            display: block;
+        }
+
+        .message.error {
+            background-color: #fee2e2;
+            color: #7f1d1d;
+            border-left: 4px solid #ef4444;
+            display: block;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Login Section -->
+        <div class="container">
+            <h1>📅 Appointment Booking</h1>
+            <p class="subtitle">Login or register to get started</p>
+
+            <div id="message" class="message"></div>
+
+            <!-- Role Selector -->
+            <div class="role-selector">
+                <button class="role-btn active" onclick="selectRole('patient')">👤 Patient</button>
+                <button class="role-btn" onclick="selectRole('doctor')">👨‍⚕️ Doctor</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-login">Login</button>
+                </form>
+
+                <div class="toggle-form">
+                    Don't have an account? <a onclick="toggleForms()">Register here</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" style="display: none;">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail">Email Address</label>
+                        <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" placeholder="Create a password" required>
+                    </div>
+
+                    <div class="form-group" id="phoneGroup">
+                        <label for="registerPhone">Phone Number</label>
+                        <input type="tel" id="registerPhone" placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="form-group" id="specialtyGroup" style="display: none;">
+                        <label for="registerSpecialty">Medical Specialty</label>
+                        <input type="text" id="registerSpecialty" placeholder="e.g., Cardiology, Dermatology">
+                    </div>
+
+                    <button type="submit" class="btn btn-login">Register</button>
+                </form>
+
+                <div class="toggle-form">
+                    Already have an account? <a onclick="toggleForms()">Login here</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <!-- <div class="feature-section">
+            <div class="feature-header">
+                <h2>Welcome</h2>
+                <p>Professional Appointment Management System</p>
+            </div>
+
+            <div class="feature-list">
+                <h3>For Patients</h3>
+                <ul>
+                    <li>Interactive calendar booking interface</li>
+                    <li>Browse available doctors</li>
+                    <li>Real-time appointment status</li>
+                    <li>Appointment history tracking</li>
+                    <li>Instant notifications</li>
+                </ul>
+            </div>
+
+            <div class="feature-list">
+                <h3>For Doctors</h3>
+                <ul>
+                    <li>Manage patient appointments</li>
+                    <li>Accept or decline bookings</li>
+                    <li>Mark unavailable dates</li>
+                    <li>Real-time notifications</li>
+                    <li>View appointment history</li>
+        </div> -->
+    </div>
+
+    <!-- Schedule Setup Modal for Patients -->
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+            <h2>Set Your Appointment Schedule</h2>
+            
+            <form onsubmit="handleScheduleSetup(event)">
+                <div class="form-group">
+                    <label for="scheduleStartDate">Available From (Date)</label>
+                    <input type="date" id="scheduleStartDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduleEndDate">Available Until (Date)</label>
+                    <input type="date" id="scheduleEndDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduleStartTime">Preferred Appointment Time</label>
+                    <input type="time" id="scheduleStartTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduleDuration">Appointment Duration (minutes)</label>
+                    <input type="number" id="scheduleDuration" value="30" min="15" step="15" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduleNotes">Additional Notes</label>
+                    <textarea id="scheduleNotes" placeholder="Any preferences or notes" style="width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 5px; font-family: inherit; font-size: 1em; resize: vertical; min-height: 100px;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-login">Save Schedule</button>
+                <button type="button" class="btn btn-register" onclick="closeScheduleModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let currentRole = 'patient';
+
+        function selectRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update specialty field visibility
+            const specialtyGroup = document.getElementById('specialtyGroup');
+            const phoneGroup = document.getElementById('phoneGroup');
+            if (role === 'doctor') {
+                specialtyGroup.style.display = 'block';
+                phoneGroup.style.display = 'none';
+            } else {
+                specialtyGroup.style.display = 'none';
+                phoneGroup.style.display = 'block';
+            }
+
+            // Reset forms
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            clearMessage();
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+            registerForm.style.display = registerForm.style.display === 'none' ? 'block' : 'none';
+            clearMessage();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // For demo purposes - store credentials in localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                showMessage('Invalid email or password', 'error');
+                return;
+            }
+
+            // Store logged-in user
+            localStorage.setItem('currentUser', JSON.stringify(user));
+
+            // Show message and redirect
+            showMessage('Login successful! Redirecting...', 'success');
+            setTimeout(() => {
+                if (user.role === 'patient') {
+                    window.location.href = '/client';
+                } else {
+                    window.location.href = '/doctor';
+                }
+            }, 1500);
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const phone = document.getElementById('registerPhone').value;
+            const specialty = document.getElementById('registerSpecialty').value;
+
+            // Get existing users
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // Check if email already exists
+            if (users.find(u => u.email === email)) {
+                showMessage('Email already registered', 'error');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password,
+                role: currentRole,
+                phone: currentRole === 'patient' ? phone : null,
+                specialty: currentRole === 'doctor' ? specialty : null,
+                registeredAt: new Date().toISOString()
+            };
+
+            // Add to users
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Store logged-in user
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+
+            showMessage('Registration successful! Redirecting...', 'success');
+            setTimeout(() => {
+                if (currentRole === 'patient') {
+                    // Show schedule setup modal for patients
+                    document.getElementById('scheduleModal').classList.add('show');
+                } else {
+                    window.location.href = '/doctor';
+                }
+            }, 1500);
+        }
+
+        function handleScheduleSetup(e) {
+            e.preventDefault();
+            const startDate = document.getElementById('scheduleStartDate').value;
+            const endDate = document.getElementById('scheduleEndDate').value;
+            const startTime = document.getElementById('scheduleStartTime').value;
+            const duration = document.getElementById('scheduleDuration').value;
+            const notes = document.getElementById('scheduleNotes').value;
+
+            // Save schedule to localStorage
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            currentUser.schedule = {
+                startDate,
+                endDate,
+                startTime,
+                duration,
+                notes
+            };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Update in users list
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            showMessage('Schedule saved! Redirecting to dashboard...', 'success');
+            setTimeout(() => {
+                window.location.href = '/client';
+            }, 1500);
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('scheduleModal').classList.remove('show');
+        }
+
+        function showMessage(msg, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = msg;
+            messageDiv.className = `message ${type}`;
+        }
+
+        function clearMessage() {
+            document.getElementById('message').className = 'message';
+        }
+
+        // Check if user is already logged in
+        window.addEventListener('load', () => {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                if (user.role === 'patient') {
+                    window.location.href = '/client';
+                } else {
+                    window.location.href = '/doctor';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
