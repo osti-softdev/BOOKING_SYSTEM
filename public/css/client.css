@@ -1,0 +1,108 @@
+/* client.css - styles specific to the Client/Patient dashboard */
+
+.client-view {
+    grid-template-columns: 260px 1fr 320px;
+    align-items: start;
+    gap: 12px; /* tighter spacing between columns/panels for compact step layout */
+}
+
+/* Place panels into specific columns for a left sidebar layout */
+.client-view .client-sidebar {
+    grid-column: 1;
+}
+
+.client-view .left-panel,
+.client-view .middle-panel {
+    grid-column: 2;
+}
+
+.client-view .right-panel {
+    grid-column: 3;
+}
+
+/* Reduced padding and heading spacing for denser step containers */
+.client-view .panel-section {
+    padding: 14px;
+}
+
+.client-view .panel-section h2 {
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.client-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.client-avatar {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(102,126,234,0.18);
+}
+
+.client-name {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #111827;
+    text-align: center;
+}
+
+.client-member {
+    font-size: 0.95em;
+    color: #6b7280;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.client-sidebar .profile-info .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-top: 1px dashed #e6e9f2;
+    color: #374151;
+    font-weight: 600;
+}
+
+.client-sidebar .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.client-sidebar .profile-actions .btn {
+    width: 100%;
+    text-align: center;
+}
+
+.client-sidebar .links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Client responsive placement */
+@media (max-width: 1400px) {
+    .main-content.client-view {
+        grid-template-columns: 1fr;
+    }
+    .client-sidebar {
+        order: -1;
+        grid-column: 1 / -1;
+    }
+}

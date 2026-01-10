@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient - Booking System</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/client.css">
 </head>
 <body>
     <div class="app-container">
@@ -17,7 +18,41 @@
             </div>
         </nav>
 
-        <div class="main-content">
+        <div class="main-content client-view">
+            <aside class="client-sidebar">
+                <div class="panel-section profile-card">
+                    <div class="profile-header">
+                        <div class="client-avatar">AB</div>
+                        <h3 class="client-name">Alex Brown</h3>
+                        <p class="client-member">Member since 2021</p>
+                    </div>
+
+                    <div class="profile-info">
+                        <div class="info-row"><span>Upcoming</span><strong>2</strong></div>
+                        <div class="info-row"><span>Past</span><strong>5</strong></div>
+                        <div class="info-row"><span>Balance</span><strong>$0</strong></div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button class="btn btn-primary">Edit Profile</button>
+                        <button class="btn btn-secondary">My Payments</button>
+                        <button class="btn btn-success">Book Now</button>
+                        <button class="btn btn-warning">Messages</button>
+                    </div>
+                </div>
+
+                <div class="panel-section quick-links">
+                    <h2>Quick Links</h2>
+                    <ul class="links-list">
+                        <li><button class="btn btn-secondary">Appointment History</button></li>
+                        <li><button class="btn btn-secondary">Insurance</button></li>
+                        <li><button class="btn btn-secondary">Health Records</button></li>
+                        <li><button class="btn btn-secondary">Prescriptions</button></li>
+                        <li><button class="btn btn-secondary">Help &amp; Support</button></li>
+                    </ul>
+                </div>
+            </aside>
+
             <!-- Left Panel - Doctor Selection -->
             <div class="left-panel">
                 <div class="panel-section">
@@ -81,6 +116,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 

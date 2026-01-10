@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor - Booking System</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/doctor.css">
 </head>
 <body>
     <div class="app-container">
@@ -22,6 +23,38 @@
         </nav>
 
         <div class="main-content doctor-view">
+            <aside class="doctor-sidebar">
+                <div class="panel-section profile-card">
+                    <div class="profile-header">
+                        <div class="doctor-avatar">JD</div>
+                        <h3 class="doctor-fullname">Dr. John Doe</h3>
+                        <p class="doctor-specialty">Cardiologist</p>
+                    </div>
+
+                    <div class="profile-info">
+                        <div class="info-row"><span>Patients</span><strong>120</strong></div>
+                        <div class="info-row"><span>Today</span><strong>8</strong></div>
+                        <div class="info-row"><span>Rating</span><strong>4.8 ★</strong></div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button class="btn btn-primary">Edit Profile</button>
+                        <button class="btn btn-secondary">My Schedule</button>
+                        <button class="btn btn-success">Set Availability</button>
+                        <button class="btn btn-warning">Settings</button>
+                    </div>
+                </div>
+
+                <div class="panel-section quick-links">
+                    <h2>Quick Links</h2>
+                    <ul class="links-list">
+                        <li><button class="btn btn-secondary">Manage Patients</button></li>
+                        <li><button class="btn btn-secondary">Reports</button></li>
+                        <li><button class="btn btn-secondary">Support</button></li>
+                    </ul>
+                </div>
+            </aside>
+
             <!-- Left Panel - Calendar & Unavailable Dates -->
             <div class="left-panel">
                 <div class="panel-section">
