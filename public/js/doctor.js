@@ -2,6 +2,8 @@
 let currentDoctorId = null;
 let currentMonth = new Date();
 let appointmentsByDate = {};
+let selectedDayAppointmentId = null;
+let selectedDayClientId = null;
 let unreadNotifications = 0;
 
 // Socket.io connection
@@ -680,7 +682,7 @@ function renderCalendar() {
         if (isToday) classes += ' today';
         if (hasAppointments) classes += ' has-appointments';
 
-        html += `<div class="calendar-day ${classes}" title="${hasAppointments ? appointmentsByDate[dateStr].length + ' appointment(s)' : ''}">${day}</div>`;
+        html += `<div class="calendar-day ${classes}" title="${hasAppointments ? appointmentsByDate[dateStr].length + ' appointment(s)' : ''}" onclick="openDayModal('${dateStr}')">${day}</div>`; 
     }
 
     // Next month's days
@@ -740,6 +742,79 @@ function closeNotification() {
 
 function closeModal() {
     $('#popupModal').addClass('hidden');
+}
+
+// --- Day Modal handlers ---
+function openDayModal(dateStr) {
+    const displayDate = new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    $('#dayModalDate').text(displayDate);
+
+    const slots = appointmentsByDate[dateStr] || [];
+    let html = '';
+    for (let i = 0; i < 4; i++) {
+        const apt = slots[i];
+        if (apt) {
+            html += `
+                <div class="day-slot" data-id="${apt.id}" data-client="${apt.clientId}" onclick="selectDaySlot(${apt.id}, ${apt.clientId}, '${dateStr}')">
+                    <div class="slot-time">${apt.appointmentTime}</div>
+                    <div class="slot-info">
+                        <div class="slot-name">${apt.clientName}</div>
+                        <div class="slot-reason">${apt.reason}</div>
+                    </div>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="day-slot empty">
+                    <div class="slot-time">—</div>
+                    <div class="slot-info">Available</div>
+                </div>
+            `;
+        }
+    }
+
+    if (slots.length > 4) {
+        html += `<div class="more">+${slots.length - 4} more</div>`;
+    }
+
+    $('#dayModalSlots').html(html);
+    selectedDayAppointmentId = null;
+    selectedDayClientId = null;
+    $('#dayModalDetails').html('<p class="loading">Select an appointment to see details</p>');
+    $('#dayModal').removeClass('hidden');
+}
+
+function selectDaySlot(appointmentId, clientId, dateStr) {
+    selectedDayAppointmentId = appointmentId;
+    selectedDayClientId = clientId;
+    $('.day-slot').removeClass('selected');
+    $(`.day-slot[data-id='${appointmentId}']`).addClass('selected');
+
+    const slots = appointmentsByDate[dateStr] || [];
+    const apt = slots.find(a => a.id === appointmentId);
+    if (apt) {
+        const html = `
+            <div class="detail-row"><strong>Patient:</strong> ${apt.clientName}</div>
+            <div class="detail-row"><strong>Time:</strong> ${apt.appointmentTime}</div>
+            <div class="detail-row"><strong>Phone:</strong> ${apt.phone || 'N/A'}</div>
+            <div class="detail-row"><strong>Reason:</strong> ${apt.reason}</div>
+            <div class="detail-actions">
+                <button class="btn btn-success" onclick="acceptAppointment(${apt.id}, ${apt.clientId})">Confirm</button>
+                <button class="btn btn-danger" onclick="declineAppointment(${apt.id}, ${apt.clientId})">No</button>
+            </div>
+        `;
+        $('#dayModalDetails').html(html);
+    } else {
+        $('#dayModalDetails').html('<p class="loading">Details not found</p>');
+    }
+}
+
+function closeDayModal() {
+    $('#dayModal').addClass('hidden');
+    $('#dayModalSlots').html('');
+    $('#dayModalDetails').html('');
+    selectedDayAppointmentId = null;
+    selectedDayClientId = null;
 }
 
 function logout() {

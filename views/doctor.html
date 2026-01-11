@@ -148,6 +148,22 @@
         </div>
     </div>
 
+    <!-- Day Modal: Shows up to 4 appointments for a selected date -->
+    <div id="dayModal" class="modal hidden">
+        <div class="modal-content day-modal">
+            <span class="close-btn" onclick="closeDayModal()">&times;</span>
+            <h2>Appointments — <span id="dayModalDate">-</span></h2>
+            <div class="modal-body">
+                <div class="day-slots" id="dayModalSlots">
+                    <!-- Appointment slots will be injected here -->
+                </div>
+                <div class="day-details" id="dayModalDetails">
+                    <p class="loading">Select an appointment to view details</p>
+                </div>
+            </div>
+        </div>
+    </div> 
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="/js/doctor.js"></script>

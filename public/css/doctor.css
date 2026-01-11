@@ -243,3 +243,72 @@ body {
         grid-column: 1 / -1;
     }
 }
+
+/* Day modal (doctor) styles */
+.day-modal .modal-content {
+    max-width: 900px;
+    padding: 20px;
+}
+
+.day-modal .modal-body {
+    display: flex;
+    gap: 20px;
+    margin-top: 12px;
+}
+
+.day-modal .day-slots {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 60vh;
+    overflow: auto;
+}
+
+.day-modal .day-slot {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.day-modal .day-slot.selected {
+    border-color: #10b981;
+    background: #ecfdf5;
+}
+
+.day-modal .day-slot.empty {
+    opacity: 0.6;
+}
+
+.day-modal .slot-time {
+    min-width: 70px;
+    font-weight: 700;
+    color: #374151;
+}
+
+.day-modal .slot-info .slot-name {
+    font-weight: 700;
+}
+
+.day-modal .day-details {
+    width: 40%;
+    padding-left: 12px;
+    border-left: 1px solid #e5e7eb;
+}
+
+.day-modal .detail-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 700px) {
+    .day-modal .modal-content { max-width: 95%; }
+    .day-modal .modal-body { flex-direction: column; }
+    .day-modal .day-slots, .day-modal .day-details { width: 100%; }
+}
