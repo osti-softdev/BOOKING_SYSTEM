@@ -53,15 +53,8 @@
                 </div>
             </aside>
 
-            <!-- Left Panel - Doctor Selection -->
-            <div class="left-panel">
-                <div class="panel-section">
-                    <h2>Step 1: Select a Doctor</h2>
-                    <div id="doctorList" class="doctor-list">
-                        <p class="loading">Loading doctors...</p>
-                    </div>
-                </div>
-            </div>
+            <!-- Left Panel - Doctor Selection removed — booking by date only -->
+            <!-- Previously allowed selecting a specific doctor; UI now books by date only -->
 
             <!-- Middle Panel - Calendar -->
             <div class="middle-panel">
@@ -71,48 +64,12 @@
                 </div>
             </div>
 
-            <!-- Right Panel - Booking Form & Appointments -->
+            <!-- Right Panel - Appointments -->
             <div class="right-panel">
                 <div class="panel-section">
-                    <div class="tabs">
-                        <button class="tab-btn active" onclick="switchTab('booking')">Book Appointment</button>
-                        <button class="tab-btn" onclick="switchTab('myAppointments')">My Appointments</button>
-                    </div>
-
-                    <!-- Booking Tab -->
-                    <div id="booking" class="tab-content active">
-                        <h3>Step 3: Complete Booking</h3>
-                        <form id="bookingForm" class="booking-form">
-                            <div class="form-group">
-                                <label>Doctor:</label>
-                                <input type="text" id="selectedDoctorDisplay" readonly placeholder="No doctor selected">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Date:</label>
-                                <input type="text" id="selectedDateDisplay" readonly placeholder="No date selected">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="appointmentTime">Preferred Time:</label>
-                                <input type="time" id="appointmentTime" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="reason">Reason for Visit:</label>
-                                <textarea id="reason" placeholder="Please describe your reason for the appointment" rows="4" required></textarea>
-                            </div>
-
-                            <button type="button" class="btn btn-primary" onclick="showAppointmentSummary()">Review & Confirm</button>
-                        </form>
-                    </div>
-
-                    <!-- My Appointments Tab -->
-                    <div id="myAppointments" class="tab-content">
-                        <h3>My Appointments</h3>
-                        <div id="appointmentsList" class="appointments-list">
-                            <p class="loading">Loading appointments...</p>
-                        </div>
+                    <h3>My Appointments</h3>
+                    <div id="appointmentsList" class="appointments-list">
+                        <p class="loading">Loading appointments...</p>
                     </div>
                 </div>
             </div>
@@ -160,6 +117,28 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeNotification()">&times;</span>
             <div id="notificationMessage"></div>
+        </div>
+    </div>
+
+    <!-- Booking Modal (opens when a calendar date is clicked) -->
+    <div id="bookingModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeBookingModal()">&times;</span>
+            <h2>Book Appointment — <span id="bookingModalDate">-</span></h2>
+            <form id="bookingModalForm" onsubmit="submitBooking(event)">
+                <div class="form-group">
+                    <label for="bookingTime">Preferred Time:</label>
+                    <input type="time" id="bookingTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingReason">Reason for Visit:</label>
+                    <textarea id="bookingReason" rows="4" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 

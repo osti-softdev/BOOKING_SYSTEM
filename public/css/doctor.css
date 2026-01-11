@@ -1,33 +1,126 @@
+/* ===============================
+   GLOBAL RESET & SAFETY
+================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
-/* Layout for doctor view */
-.doctor-view {
-    grid-template-columns: 260px 1fr 360px;
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ===============================
+   DOCTOR MAIN GRID LAYOUT
+================================ */
+.main-content.doctor-view {
+    display: grid;
+
+    /* Sidebar | Calendar (compact) | Appointments (wide) */
+    grid-template-columns: 
+        260px 
+        minmax(420px, 0.9fr) 
+        minmax(480px, 1.3fr);
+
+    gap: 12px;
+
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 12px;
+
     align-items: start;
 }
 
-/* Doctor Sidebar */
+/* Prevent grid overflow bugs */
+.main-content.doctor-view > * {
+    min-width: 0;
+}
+
+/* ===============================
+   GRID PLACEMENT
+================================ */
+.doctor-sidebar {
+    grid-column: 1;
+    margin: 0;
+    padding: 0;
+    align-self: stretch;
+}
+
+.left-panel {
+    grid-column: 2;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.right-panel {
+    grid-column: 3;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Notification overlay panel */
+.notification-panel {
+    grid-column: 2;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* Kill inherited sidebar offsets */
+.doctor-view aside {
+    margin-left: 0 !important;
+}
+
+/* ===============================
+   PANEL STYLING
+================================ */
+.panel-section {
+    width: 100%;
+    padding: 14px;
+}
+
+.panel-section h2,
+.panel-section h3 {
+    margin: 0 0 8px;
+    padding-bottom: 6px;
+}
+
+/* ===============================
+   SIDEBAR CONTENT
+================================ */
 .doctor-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
+/* Avatar */
 .doctor-avatar {
     width: 96px;
     height: 96px;
     margin: 0 auto 12px;
     border-radius: 50%;
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    color: white;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 1.4em;
     font-weight: 700;
-    box-shadow: 0 6px 18px rgba(102,126,234,0.18);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.18);
 }
 
 .doctor-fullname {
+    text-align: center;
     font-size: 1.1em;
     font-weight: 700;
     margin-bottom: 4px;
@@ -35,20 +128,23 @@
 }
 
 .doctor-specialty {
+    text-align: center;
     font-size: 0.95em;
     color: #6b7280;
     margin-bottom: 12px;
 }
 
+/* Info rows */
 .profile-info .info-row {
     display: flex;
     justify-content: space-between;
     padding: 8px 6px;
     border-top: 1px dashed #e6e9f2;
-    color: #374151;
     font-weight: 600;
+    color: #374151;
 }
 
+/* Actions */
 .profile-actions {
     display: flex;
     flex-direction: column;
@@ -61,10 +157,12 @@
     text-align: center;
 }
 
+/* Quick links */
 .quick-links .links-list {
     list-style: none;
     padding: 0;
     margin: 0;
+
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -75,13 +173,73 @@
     padding-left: 12px;
 }
 
-/* Responsive placement for doctor sidebar */
-@media (max-width: 1400px) {
+/* ===============================
+   LEFT PANEL (CALENDAR SIDE)
+================================ */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Make calendar slightly more compact */
+.left-panel .calendar {
+    font-size: 0.9rem;
+}
+
+/* ===============================
+   RIGHT PANEL (APPOINTMENTS)
+================================ */
+.right-panel .appointments-list {
+    width: 100%;
+}
+
+.tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 8px;
+    font-weight: 600;
+}
+
+/* ===============================
+   NOTIFICATION PANEL
+================================ */
+.notification-panel.hidden {
+    display: none;
+}
+
+/* ===============================
+   RESPONSIVE BEHAVIOR
+================================ */
+
+/* Large tablets */
+@media (max-width: 1300px) {
+    .main-content.doctor-view {
+        grid-template-columns: 
+            220px 
+            minmax(0, 1fr);
+    }
+
+    .right-panel {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Tablets & phones */
+@media (max-width: 900px) {
     .main-content.doctor-view {
         grid-template-columns: 1fr;
     }
-    .doctor-sidebar {
-        order: -1;
+
+    .doctor-sidebar,
+    .left-panel,
+    .notification-panel,
+    .right-panel {
         grid-column: 1 / -1;
     }
 }

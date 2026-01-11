@@ -19,8 +19,7 @@ $(document).ready(function() {
     // Register client with socket
     socket.emit('register-client', currentClientId);
 
-    // Load doctors
-    loadDoctors();
+    // Doctor selection removed (booking by date only)
 
     // Load appointments
     loadAppointments();
@@ -197,13 +196,17 @@ function nextMonth() {
 
 function selectDate(dateStr, element) {
     if (element.classList.contains('disabled')) return;
-    
+
     selectedDate = dateStr;
-    $('#selectedDateDisplay').val(dateStr);
-    
-    // Update calendar
+
+    // Update calendar selection
     $('.calendar-day').removeClass('selected');
     element.classList.add('selected');
+
+    // Show booking modal with selected date
+    const displayDate = new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    $('#bookingModalDate').text(displayDate);
+    $('#bookingModal').removeClass('hidden');
 }
 
 // Handle booking form submission
@@ -249,6 +252,59 @@ function closeSummary() {
     $('#summaryModal').addClass('hidden');
 }
 
+// Booking modal controls
+function closeBookingModal() {
+    $('#bookingModal').addClass('hidden');
+    $('#bookingModalForm')[0].reset();
+    selectedDate = null;
+    $('.calendar-day').removeClass('selected');
+}
+
+function submitBooking(e) {
+    e.preventDefault();
+    const appointmentTime = $('#bookingTime').val();
+    const reason = $('#bookingReason').val();
+
+    if (!selectedDate || !appointmentTime || !reason) {
+        showNotification('Please select a date and fill in time and reason', 'error');
+        return;
+    }
+
+    $.ajax({
+        url: '/api/client/book-appointment',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            clientId: currentClientId,
+            doctorId: null,
+            appointmentDate: selectedDate,
+            appointmentTime: appointmentTime,
+            reason: reason
+        }),
+        success: function(response) {
+            closeBookingModal();
+            showNotification('✅ Appointment booked successfully!', 'success');
+            
+            // Notify system (no specific doctor)
+            socket.emit('appointment-booked', {
+                clientId: currentClientId,
+                doctorId: null,
+                appointmentDate: selectedDate,
+                appointmentTime: appointmentTime,
+                appointmentId: response.appointmentId
+            });
+            
+            selectedDate = null;
+            $('.calendar-day').removeClass('selected');
+            loadAppointments();
+        },
+        error: function(err) {
+            showNotification('Error booking appointment. Time slot may be unavailable.', 'error');
+            console.error('Booking error:', err);
+        }
+    });
+}
+
 // Confirm booking after review
 function confirmBooking() {
     const appointmentTime = $('#appointmentTime').val();
@@ -269,21 +325,19 @@ function confirmBooking() {
             closeSummary();
             showNotification('✅ Appointment booked successfully!', 'success');
             
-            // Notify doctor through socket
+            // Notify system (no specific doctor)
             socket.emit('appointment-booked', {
                 clientId: currentClientId,
-                doctorId: currentDoctorId,
+                doctorId: null,
                 appointmentDate: selectedDate,
                 appointmentTime: appointmentTime,
                 appointmentId: response.appointmentId
             });
 
-            // Reset form
-            $('#bookingForm')[0].reset();
-            $('#selectedDoctorDisplay').val('');
-            $('#selectedDateDisplay').val('');
+            // Reset selection
             selectedDate = null;
-            
+            $('.calendar-day').removeClass('selected');
+
             // Reload appointments
             loadAppointments();
         },

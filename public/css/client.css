@@ -1,80 +1,141 @@
-/* client.css - styles specific to the Client/Patient dashboard */
+/* ===============================
+   GLOBAL RESET & SAFETY FIXES
+================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
-.client-view {
-    grid-template-columns: 260px 1fr 320px;
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ===============================
+   CLIENT MAIN GRID LAYOUT
+================================ */
+.main-content.client-view {
+    display: grid;
+
+    /* Sidebar | Calendar (smaller) | Appointments (larger) */
+    grid-template-columns:
+        260px
+        minmax(380px, 0.85fr)
+        minmax(460px, 1.4fr);
+
+    gap: 12px;
+
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 12px;
+
     align-items: start;
-    gap: 12px; /* tighter spacing between columns/panels for compact step layout */
 }
 
-/* Place panels into specific columns for a left sidebar layout */
-.client-view .client-sidebar {
+/* Prevent grid overflow bugs */
+.main-content.client-view > * {
+    min-width: 0;
+}
+
+/* ===============================
+   GRID PLACEMENT
+================================ */
+.client-sidebar {
     grid-column: 1;
+    margin: 0;
+    padding: 0;
+    align-self: stretch;
 }
 
-.client-view .left-panel,
-.client-view .middle-panel {
+.middle-panel {
     grid-column: 2;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.client-view .right-panel {
+.right-panel {
     grid-column: 3;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-/* Reduced padding and heading spacing for denser step containers */
-.client-view .panel-section {
+/* Kill any inherited sidebar margin */
+.client-view aside {
+    margin-left: 0 !important;
+}
+
+/* ===============================
+   PANEL STYLING
+================================ */
+.panel-section {
+    width: 100%;
     padding: 14px;
 }
 
-.client-view .panel-section h2 {
+/* Compact headers */
+.panel-section h2,
+.panel-section h3 {
+    margin: 0 0 8px;
     padding-bottom: 6px;
-    margin-bottom: 8px;
 }
 
+/* ===============================
+   SIDEBAR CONTENT
+================================ */
 .client-sidebar {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
+/* Avatar */
 .client-avatar {
     width: 96px;
     height: 96px;
     margin: 0 auto 12px;
     border-radius: 50%;
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    color: white;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 1.4em;
     font-weight: 700;
-    box-shadow: 0 6px 18px rgba(102,126,234,0.18);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.18);
 }
 
 .client-name {
+    text-align: center;
     font-size: 1.1em;
     font-weight: 700;
     margin-bottom: 4px;
     color: #111827;
-    text-align: center;
 }
 
 .client-member {
+    text-align: center;
     font-size: 0.95em;
     color: #6b7280;
     margin-bottom: 12px;
-    text-align: center;
 }
 
+/* Info rows */
 .client-sidebar .profile-info .info-row {
     display: flex;
     justify-content: space-between;
     padding: 8px 6px;
     border-top: 1px dashed #e6e9f2;
-    color: #374151;
     font-weight: 600;
+    color: #374151;
 }
 
+/* Actions */
 .client-sidebar .profile-actions {
     display: flex;
     flex-direction: column;
@@ -87,22 +148,63 @@
     text-align: center;
 }
 
+/* Quick links */
 .client-sidebar .links-list {
     list-style: none;
     padding: 0;
     margin: 0;
+
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* Client responsive placement */
-@media (max-width: 1400px) {
+/* ===============================
+   CALENDAR (MINIMIZED)
+================================ */
+.middle-panel .calendar {
+    font-size: 0.88rem;
+}
+
+/* Optional: tighter calendar cells */
+.calendar td,
+.calendar th {
+    padding: 4px;
+}
+
+/* ===============================
+   APPOINTMENTS (MAXIMIZED)
+================================ */
+.right-panel .appointments-list {
+    width: 100%;
+}
+
+/* ===============================
+   RESPONSIVE BEHAVIOR
+================================ */
+
+/* Medium screens */
+@media (max-width: 1200px) {
+    .main-content.client-view {
+        grid-template-columns:
+            220px
+            minmax(0, 1fr);
+    }
+
+    .right-panel {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Small screens */
+@media (max-width: 900px) {
     .main-content.client-view {
         grid-template-columns: 1fr;
     }
-    .client-sidebar {
-        order: -1;
+
+    .client-sidebar,
+    .middle-panel,
+    .right-panel {
         grid-column: 1 / -1;
     }
 }
